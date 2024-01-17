@@ -7,8 +7,9 @@
 
 - start the app with the command $ "npm start"
 - Server will start to run on http://localhost:3001/
-#Endpoint to get consent url
+
+# Endpoint to get consent url
 http://localhost:3001/auth/google
 
-#Endpoint to send email messages
+# Endpoint to send email messages
 http://localhost:3001/send
