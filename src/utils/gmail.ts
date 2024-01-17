@@ -122,11 +122,10 @@ export const addLabel = async(auth:any, message:any, labelId:string) => {
 
 export const markThreadAsReplied = async (threadId:string, repliedThreadsFile:string) =>  {
     try {
-      const repliedThreads = await fs.readFile(repliedThreadsFile, "utf-8");
-      const repliedThreadsArray = JSON.parse(repliedThreads);
-      repliedThreadsArray.push(threadId);
-      await fs.writeFile(repliedThreadsFile, JSON.stringify(repliedThreadsArray, null, 2));
-      return repliedThreadsArray;
+      let threadIds = []; 
+      threadIds.push(threadId);
+      await fs.writeFile(repliedThreadsFile, JSON.stringify({threads:threadIds}));
+      return threadIds;
     } catch (error) {
       console.error("Error marking thread as replied:", error);
     }
@@ -134,8 +133,8 @@ export const markThreadAsReplied = async (threadId:string, repliedThreadsFile:st
 
   export const hasThreadBeenReplied =  async (threadId:string, repliedThreadsFile:string) => {
     try {
-      const repliedThreads = await fs.readFile(repliedThreadsFile, "utf-8");
-      const repliedThreadsArray = JSON.parse(repliedThreads);
+      const repliedThreads:any = await fs.readFile(repliedThreadsFile, "utf-8");
+      const repliedThreadsArray =  repliedThreads.threads;
       return repliedThreadsArray.includes(threadId);
     } catch (error) {
       console.error("Error checking if thread has been replied:", error);
