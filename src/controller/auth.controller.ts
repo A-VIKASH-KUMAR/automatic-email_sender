@@ -1,11 +1,6 @@
 import { google } from "googleapis";
 import fs from "fs";
 import path from "path";
-import {
-  getUnrepliedMessages,
-  getEmailDetails,
-  sendEmail,
-} from "../utils/gmail";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -32,8 +27,6 @@ export const getGoogleConsentLink = (req: any, res: any) => {
 };
 
 export const getGmailCredentials = async (req: any, res: any) => {
-  //   console.log("req", req);
-  //   console.log("res", res);
   const oauth2Client = new google.auth.OAuth2(
     googleConfig.clientId,
     googleConfig.clientSecret,
@@ -53,38 +46,5 @@ export const getGmailCredentials = async (req: any, res: any) => {
     expiry_date:tokens.expiry_date
   });
   await fs.writeFileSync(tokenPath, payload);
-  
-//   oauth2Client.setCredentials({
-//     access_token: tokens.access_token,
-//     refresh_token: tokens.refresh_token,
-//     scope: process.env.GOOGLE_SCOPES,
-//     token_type: "Bearer",
-//     expiry_date: tokens.expiry_date,
-//   });
-  
-//   const unrepliedMessages = await getUnrepliedMessages(oauth2Client);
-//   console.log("message ids", unrepliedMessages);
-
-//   const unrepliedMessage: any = await getEmailDetails(
-//     oauth2Client,
-//     unrepliedMessages[0].threadId!
-//   );
-
-//   const subject = unrepliedMessage.data.payload.headers.find(
-//     (header: any) => header.name == "Subject"
-//   ).value;
-//   const from = unrepliedMessage.data.payload.headers.find(
-//     (header: any) => header.name == "From"
-//   ).value;
-
-//   const replyTo = from.match(/<(.*)>/)[1];
-//   const replySubject = subject.startsWith("Re:") ? subject : `Re: ${subject}`;
-//   const sendReply = await sendEmail(
-//     oauth2Client,
-//     replyTo,
-//     replySubject,
-//     unrepliedMessages[0].id!
-//   );
-//   console.log("send reply", sendReply);
   res.status(200).json({ message: 'Login successful! You can now go back to the app.' });
 };
