@@ -42,7 +42,7 @@ export const sendMessages = async (req: any, res: any) => {
     console.log("message ids", unrepliedMessages);
     const label = await createLabel(oauth2Client);
     for (let index = 0; index < unrepliedMessages.length; index++) {
-        const threadId = unrepliedMessages[index].threadId;
+      const threadId = unrepliedMessages[index].threadId;
       const checkIfReplied = await hasThreadBeenReplied(
         threadId,
         repliedThreadsFile
@@ -68,23 +68,15 @@ export const sendMessages = async (req: any, res: any) => {
       const replySubject = subject.startsWith("Re:")
         ? subject
         : `Re: ${subject}`;
-      const sendReply = await sendEmail(
-        oauth2Client,
-        senderEmail,
-        replySubject,
-        messageId
-      );
-      await addLabel(oauth2Client, unrepliedMessages[0], label);
-      const markedReplied = await markThreadAsReplied(
-        threadId,
-        repliedThreadsFile
-      );
-      console.log("marked replied", markedReplied);
-
-      console.log("send reply", sendReply);
+      await sendEmail(oauth2Client, senderEmail, replySubject, messageId);
+      await addLabel(oauth2Client, unrepliedMessages[index], label);
+      // await markThreadAsReplied(
+      //   threadId,
+      //   repliedThreadsFile
+      // );
     }
 
-    res.status(200).json({ message: unrepliedMessages });
+    res.status(200).json({ message: "messages sent successfully" });
   } catch (error) {
     console.error("error to send email", error);
     res.status(500).json({ error: "error occoured to send email" });
