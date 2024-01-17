@@ -3,9 +3,10 @@ import fs from "fs/promises";
 export const loadSavedCredentialsIfExist = async (TOKEN_PATH:string) => {
     try {
         const data = await fs.readFile(TOKEN_PATH, { encoding: 'utf8' });
+        console.log(data);
         return data;
       } catch (err) {
-        console.error(err);
+        console.log(err);
       }
     
 };

@@ -34,6 +34,8 @@ export const getGmailCredentials = async (req: any, res: any) => {
   );
   const authorizationCode = req.query.code;
   const { tokens } = await oauth2Client.getToken(authorizationCode);
+  
+  console.log("tokens", tokens);
   oauth2Client.setCredentials(tokens);
   const payload = JSON.stringify({
     type: "authorized_user",

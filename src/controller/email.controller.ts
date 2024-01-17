@@ -29,6 +29,7 @@ const oauth2Client = new google.auth.OAuth2(
 export const sendMessages = async (req: any, res: any) => {
   try {
     const tokens: any = await loadSavedCredentialsIfExist(tokenPath);
+    console.log("tokens", tokens);
     const credentials = JSON.parse(tokens);
     oauth2Client.setCredentials({
       access_token: credentials.access_token,
@@ -38,6 +39,7 @@ export const sendMessages = async (req: any, res: any) => {
     });
 
     const unrepliedMessages: any = await getUnrepliedMessages(oauth2Client);
+    console.log("message ids", unrepliedMessages);
     const label = await createLabel(oauth2Client);
     for (let index = 0; index < unrepliedMessages.length; index++) {
       const threadId = unrepliedMessages[index].threadId;
