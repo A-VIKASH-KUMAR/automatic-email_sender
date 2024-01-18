@@ -4,7 +4,7 @@ import path from "path";
 import dotenv from "dotenv";
 dotenv.config();
 
-const tokenPath = path.resolve(__dirname, 'token.json');
+const tokenPath = path.resolve(__dirname, "token.json");
 
 const googleConfig = {
   clientId: process.env.GOOGLE_CLIENT_ID,
@@ -40,9 +40,11 @@ export const getGmailCredentials = async (req: any, res: any) => {
     client_id: googleConfig.clientId,
     client_secret: googleConfig.clientSecret,
     refresh_token: tokens.refresh_token,
-    access_token:tokens.access_token,
-    expiry_date:tokens.expiry_date
+    access_token: tokens.access_token,
+    expiry_date: tokens.expiry_date,
   });
   await fs.writeFileSync(tokenPath, payload);
-  res.status(200).json({ message: 'Login successful! You can now go back to the app.' });
+  res
+    .status(200)
+    .json({ message: "Login successful! You can now go back to the app." });
 };
