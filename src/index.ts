@@ -12,16 +12,13 @@ app.use(bodyParser.json());
 
 app.get("/", function (req: any, res: any) {
   res.send("Hello World");
-  
 });
 
 app.use(express.json());
 
-
 app.listen(port, () => {
-    console.log("server is running on port http://localhost:" + port);
-  });
-
+  console.log("server is running on port http://localhost:" + port);
+});
 
 app.use("/auth", authRoute);
-app.use("/send", emailRoute)
+app.use("/send", emailRoute);
