@@ -7,6 +7,14 @@
 
 - start the app with the command $ "npm start"
 - Server will start to run on http://localhost:3001/
+## Libraries used
+- Express
+- googleapis
+
+## Dev dependencies used
+- nodemon
+- ts-node
+- typescript
 
 ## Endpoint to get consent url
 http://localhost:3001/auth/google
