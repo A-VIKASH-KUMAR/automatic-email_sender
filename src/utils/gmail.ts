@@ -6,6 +6,7 @@ export const loadSavedCredentialsIfExist = async (TOKEN_PATH:string) => {
         return data;
       } catch (err) {
         console.error(err);
+        return null;
       }
     
 };
@@ -32,11 +33,12 @@ export const getEmailDetails = async (auth:any, messageId:string) => {
     return res;
 }
 
-const  createRawMessage = (to:string, subject:string, messageText:string, messageId:string) => {
+const  createRawMessage = (to:string, subject:string, messageText:string, messageId:string, threadId:string) => {
     const messageParts = [
         `From: me`,
         `To: ${to}`,
         `Subject: ${subject}`,
+        threadId,
         `In-Reply-To: ${messageId}`,
         `References: ${messageId}`,
         ``,
@@ -62,15 +64,16 @@ const getAutoReplyMessage = () => {
         A Vikash Kumar
     `;
 }
-export const sendEmail = async (auth:any, to:string, subject:string, threadId:string) => {
+export const sendEmail = async (auth:any, to:string, subject:string, messageId:string,threadId:string) => {
     const gmail = google.gmail({ version: "v1", auth });
     const messageText = getAutoReplyMessage();
-    const rawMessage = createRawMessage(to, subject, messageText, threadId);
+    const rawMessage = createRawMessage(to, subject, messageText, messageId, threadId);
 
     const emailSentResponse =await gmail.users.messages.send({
         userId: 'me',
         requestBody: {
             raw: rawMessage,
+            threadId: threadId
         },
     });
     return emailSentResponse;
@@ -133,8 +136,8 @@ export const markThreadAsReplied = async (threadId:string, repliedThreadsFile:st
   export const hasThreadBeenReplied =  async (threadId:string, repliedThreadsFile:string) => {
     try {
       const repliedThreads:any = await fs.readFile(repliedThreadsFile, "utf-8");
-      const repliedThreadsArray =  repliedThreads.threads;
-      return repliedThreadsArray.includes(threadId);
+      const repliedThreadsArray =  JSON.parse(repliedThreads).threads;
+      return repliedThreadsArray.includes(threadId) ? repliedThreadsArray.includes(threadId) :false ;
     } catch (error) {
       console.error("Error checking if thread has been replied:", error);
       return false;

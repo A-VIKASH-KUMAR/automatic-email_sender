@@ -29,9 +29,14 @@ const oauth2Client = new google.auth.OAuth2(
 export const sendMessages = async (req: any, res: any) => {
   try {
     const tokens: any = await loadSavedCredentialsIfExist(tokenPath);
+    
+    if (!tokens) {
+      return res.code(500).json({error:"please login to continue"})
+    }
     const credentials = JSON.parse(tokens);
     oauth2Client.setCredentials({
       access_token: credentials.access_token,
+      refresh_token:credentials.refresh_token ?? "",
       scope: process.env.GOOGLE_SCOPES,
       token_type: "Bearer",
       expiry_date: credentials.expiry_date,
@@ -66,12 +71,12 @@ export const sendMessages = async (req: any, res: any) => {
       const replySubject = subject.startsWith("Re:")
         ? subject
         : `Re: ${subject}`;
-      await sendEmail(oauth2Client, senderEmail, replySubject, messageId);
+      await sendEmail(oauth2Client, senderEmail, replySubject, messageId, threadId);
       await addLabel(oauth2Client, unrepliedMessages[index], label);
-      // await markThreadAsReplied(
-      //   threadId,
-      //   repliedThreadsFile
-      // );
+      await markThreadAsReplied(
+        threadId,
+        repliedThreadsFile
+      );
     }
 
     res.status(200).json({ message: "messages sent successfully" });
