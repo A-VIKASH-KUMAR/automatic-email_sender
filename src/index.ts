@@ -11,7 +11,7 @@ const port = 3001;
 app.use(bodyParser.json());
 
 app.get("/", function (req: any, res: any) {
-  res.send("Hello World");
+  res.send("This is the app to send automatic emails root endpoint test");
 });
 
 app.use(express.json());
