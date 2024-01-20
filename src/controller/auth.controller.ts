@@ -12,6 +12,7 @@ const googleConfig = {
   redirectUri: process.env.GOOGLE_REDIRECT_URL,
 };
 
+// Controller function to get google consent url
 export const getGoogleConsentLink = (req: any, res: any) => {
   const oauth2Client = new google.auth.OAuth2(
     googleConfig.clientId,
@@ -26,6 +27,7 @@ export const getGoogleConsentLink = (req: any, res: any) => {
   res.status(200).json({ consentUrl: url });
 };
 
+// Get google access token and refresh token from the authorization code of redirect url
 export const getGmailCredentials = async (req: any, res: any) => {
   const oauth2Client = new google.auth.OAuth2(
     googleConfig.clientId,

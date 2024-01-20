@@ -26,6 +26,7 @@ const oauth2Client = new google.auth.OAuth2(
   googleConfig.redirectUri
 );
 
+// load access token from get saved credentials function and send emails to different reciepients
 export const sendMessages = async (req: any, res: any) => {
   try {
     const tokens: any = await loadSavedCredentialsIfExist(tokenPath);

@@ -1,5 +1,6 @@
 import { google } from "googleapis";
 import fs from "fs/promises";
+// Function to load saved access token after google signup
 export const loadSavedCredentialsIfExist = async (TOKEN_PATH: string) => {
   try {
     const data = await fs.readFile(TOKEN_PATH, { encoding: "utf8" });
@@ -10,6 +11,7 @@ export const loadSavedCredentialsIfExist = async (TOKEN_PATH: string) => {
   }
 };
 
+// get unreplied emails
 export const getUnrepliedMessages = async (auth: any) => {
   const gmail = google.gmail({ version: "v1", auth });
   const res = await gmail.users.messages.list({
@@ -21,6 +23,7 @@ export const getUnrepliedMessages = async (auth: any) => {
   return res.data.messages || [];
 };
 
+// Get details of a specific email
 export const getEmailDetails = async (auth: any, messageId: string) => {
   const gmail = google.gmail({ version: "v1", auth });
   const res = await gmail.users.messages.get({
@@ -32,6 +35,7 @@ export const getEmailDetails = async (auth: any, messageId: string) => {
   return res;
 };
 
+// create raw message
 const createRawMessage = (
   to: string,
   subject: string,
@@ -73,6 +77,8 @@ const getAutoReplyMessage = () => {
         A Vikash Kumar
     `;
 };
+
+// Function to send email to the specific thread
 export const sendEmail = async (
   auth: any,
   to: string,
@@ -145,6 +151,7 @@ export const addLabel = async (auth: any, message: any, labelId: string) => {
   return modifiedMessage;
 };
 
+// mark thread as replied
 export const markThreadAsReplied = async (
   threadId: string,
   repliedThreadsFile: string
@@ -162,6 +169,7 @@ export const markThreadAsReplied = async (
   }
 };
 
+// check if the thread has been replied
 export const hasThreadBeenReplied = async (
   threadId: string,
   repliedThreadsFile: string
