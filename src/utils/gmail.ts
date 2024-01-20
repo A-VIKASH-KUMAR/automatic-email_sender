@@ -157,13 +157,14 @@ export const markThreadAsReplied = async (
   repliedThreadsFile: string
 ) => {
   try {
-    let threadIds = [];
-    threadIds.push(threadId);
+    const oldThreadIds:any = await fs.readFile(repliedThreadsFile,"utf8")
+    let parsedIds = JSON.parse(oldThreadIds).threads
+    parsedIds.push(threadId);
     await fs.writeFile(
       repliedThreadsFile,
-      JSON.stringify({ threads: threadIds })
+      JSON.stringify({ threads: parsedIds })
     );
-    return threadIds;
+    return parsedIds;
   } catch (error) {
     console.error("Error marking thread as replied:", error);
   }
